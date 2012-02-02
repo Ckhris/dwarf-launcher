@@ -1,0 +1,198 @@
+package mmm.dwarf.launcher;
+
+import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.animation.Interpolator;
+import android.view.animation.OvershootInterpolator;
+
+public class PlayAreaView extends View {
+	private Matrix translate;  
+	private Bitmap droid;
+	private GestureDetector gestures;
+	protected void onDraw(Canvas canvas) {  
+		//Pour la boussole utilisation d'un deuxième canvas pour ne pas interférer avec le premier
+		//centre de la vue
+		int centerX = getMeasuredWidth()/2;
+		int centerY = getMeasuredHeight()/2;
+		
+		//diamètre du cercle
+		int diam = Math.min(centerX, centerY);
+		
+		//dessin du cercle
+		canvas.drawCircle(centerX, centerY, diam, circlePaint);
+		
+		//sauvegarde du canvas
+		canvas.save();
+		
+		//rotation du canvas pour qu'il pointe vers le nord
+		canvas.rotate(-northOrientation, centerX, centerY);
+		
+		//aiguilles boussole
+		trianglePath.reset();
+		trianglePath.moveTo(centerX, centerY-diam);
+		trianglePath.lineTo(centerX-10, centerY);
+		trianglePath.lineTo(centerX+10, centerY);
+		//aiguille nord
+		canvas.drawPath(trianglePath, northPaint);
+		//aiguille sud
+		canvas.rotate(180, centerX, centerY);
+		canvas.drawPath(trianglePath, southPaint);
+		
+		//restauration du canvas
+		canvas.restore();
+		
+		//Dessin du nain
+		canvas.drawBitmap(droid, translate, null);  
+		Matrix m = canvas.getMatrix();  
+		Log.d("TG", "Matrix: "+translate.toShortString());  
+		Log.d("TG", "Canvas: "+m.toShortString());  
+	}
+	
+	public PlayAreaView(Context context) {  
+	    super(context);  
+	    translate = new Matrix();  
+	    gestures = new GestureDetector(context, new GestureListener(this));  
+	    droid = BitmapFactory.decodeResource(getResources(), R.drawable.little_dwarf);  
+	    //Nécessaire à la boussole
+	    initView();
+	}
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		// TODO Auto-generated method stub
+		return gestures.onTouchEvent(event);
+	}
+	
+    public void onMove(float dx, float dy) {  
+        translate.postTranslate(dx, dy);  
+        invalidate();  
+    }
+    
+    public void onResetLocation() {  
+        translate.reset();  
+        invalidate();  
+    }
+    
+    private Matrix animateStart;  
+    private Interpolator animateInterpolator;  
+    private long startTime;  
+    private long endTime;  
+    private float totalAnimDx;  
+    private float totalAnimDy;  
+      
+    public void onAnimateMove(float dx, float dy, long duration) {  
+        animateStart = new Matrix(translate);  
+        animateInterpolator = new OvershootInterpolator();  
+        startTime = System.currentTimeMillis();  
+        endTime = startTime + duration;  
+        totalAnimDx = dx;  
+        totalAnimDy = dy;  
+        post(new Runnable() {  
+            @Override  
+            public void run() {  
+                onAnimateStep();  
+            }  
+        });  
+    }  
+    
+    private void onAnimateStep() {  
+        long curTime = System.currentTimeMillis();  
+        float percentTime = (float) (curTime - startTime)  
+                / (float) (endTime - startTime);  
+        float percentDistance = animateInterpolator  
+                .getInterpolation(percentTime);  
+        float curDx = percentDistance * totalAnimDx;  
+        float curDy = percentDistance * totalAnimDy;  
+        translate.set(animateStart);  
+        onMove(curDx, curDy);  
+      
+        Log.v("TG", "We're " + percentDistance + " of the way there!");  
+        if (percentTime < 1.0f) {  
+            post(new Runnable() {  
+                @Override  
+                public void run() {  
+                    onAnimateStep();  
+                }  
+            });  
+        }  
+    }
+    
+    //Partie pour la boussole
+    //Rotation vers la droite en degrée pour montrer le nord
+    private float northOrientation=0;
+    
+    /**
+     * Retourne la rotation en degrée vers la droite pour montrer le nord
+     * @return
+     */
+    public float getNorthOrientation(){
+    	return northOrientation;
+    }
+    
+    /**
+     * setter de northOrientation
+     * @param n
+     */
+    public void setNorthOrientation(float n){
+    	//si la direction a changé, mettre à jour
+    	if(n!=northOrientation){
+    		this.northOrientation=n;
+    		//Réinitialiser la vue
+    		this.invalidate();
+    	}
+    }
+    
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec){
+    	int measureWidth=measure(widthMeasureSpec);
+    	int measureHeight=measure(heightMeasureSpec);
+    	int d=Math.min(measureWidth, measureHeight);
+    	setMeasuredDimension(measureWidth, measureHeight);
+    }
+    
+    private int measure(int measureSpec){
+    	int result=0;
+    	int specMode=MeasureSpec.getMode(measureSpec);
+    	int specSize=MeasureSpec.getSize(measureSpec);
+    	if(specMode==MeasureSpec.UNSPECIFIED){
+    		result=150;
+    	}
+    	else{
+    		result=specSize;
+    	}
+    	return specSize;
+    }
+    
+    private Paint circlePaint;
+    private Paint northPaint;
+    private Paint southPaint;
+    private Path trianglePath;
+    
+    private void initView(){
+    	Resources r=this.getResources();
+    	
+    	circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    	circlePaint.setColor(r.getColor(R.color.compassCircle));
+    	
+    	northPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    	northPaint.setColor(r.getColor(R.color.northPointer));
+    	
+    	southPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    	southPaint.setColor(r.getColor(R.color.southPointer));
+    	
+    	trianglePath=new Path();
+    }
+        
+}
