@@ -42,7 +42,7 @@ public class GoogleMapsActivity extends MapActivity {
 
 		//	Log.v("Chris", "Enabled: "+!locationManager.isProviderEnabled(LOCATION_SERVICE));
 		//	if(!locationManager.isProviderEnabled(LOCATION_SERVICE)){
-		/* est vrai meme quand le gps est activŽ */
+		/* est vrai meme quand le gps est activï¿½ */
 		//		Log.v("Chris", "Dans le IF");
 		//		buildAlertMessageNoGps();
 		//	}
@@ -68,7 +68,12 @@ public class GoogleMapsActivity extends MapActivity {
 		};
 
 		// Register the listener with the Location Manager to receive location updates
-		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		try{
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		}
+		catch(Exception e){
+			
+		}
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 	}
 
@@ -93,7 +98,7 @@ public class GoogleMapsActivity extends MapActivity {
 	private void buildAlertMessageNoGps() {
 		Log.v("Chris", "In buildAlertMessageNoGps");
 		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Votre GPS semble dŽsactiver, Voulez-vous l'activer?")
+		builder.setMessage("Votre GPS semble dï¿½sactiver, Voulez-vous l'activer?")
 		.setCancelable(false)
 		.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
 			public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
