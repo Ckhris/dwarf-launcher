@@ -25,7 +25,7 @@ public class LaunchPlateformActivity extends Activity {
 		image = new PlayAreaView(this);  
 		frame.addView(image);  
 		
-		//Regarde les capteurs disponibles et choisi le premier
+		//Regarde les capteurs disponibles et choisi le premier disponible
 		sensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		List<Sensor> sensors = sensorManager.getSensorList(Sensor.TYPE_ORIENTATION);
 		if (sensors.size() > 0)

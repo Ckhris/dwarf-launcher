@@ -29,7 +29,7 @@ public class PlayAreaView extends View {
 		int centerY = getMeasuredHeight()/2;
 		
 		//diamètre du cercle
-		int diam = Math.min(centerX, centerY);
+		int diam = (int) Math.min(centerX/1.5, centerY/1.5);
 		
 		//dessin du cercle
 		canvas.drawCircle(centerX, centerY, diam, circlePaint);
