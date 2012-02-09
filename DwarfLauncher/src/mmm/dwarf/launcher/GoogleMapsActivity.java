@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.GpsStatus;
@@ -58,6 +59,7 @@ public class GoogleMapsActivity extends MapActivity {
 				Log.v("Chris", "onLocationChanged");
 				afficherPoint(location.getLatitude(), location.getLongitude());
 				GeoPoint g=new GeoPoint((int) (location.getLatitude()*1E6), (int)(location.getLongitude()*1E6));
+				mapView.getController().setZoom(16);
 				mapView.getController().animateTo(g);
 			}
 
@@ -103,7 +105,21 @@ public class GoogleMapsActivity extends MapActivity {
 		String bestProvider = locationManager.getBestProvider(criteria, false);
 		Log.v("Chris", "bp: "+bestProvider);
 		
-		
+		SharedPreferences settings= getSharedPreferences("lance", 4);
+		if(settings.getInt("lanceX", 0)!=0){
+			int lanceX= settings.getInt("lanceX", 0);
+			int lanceY= settings.getInt("lanceY", 0);
+			mapView.getController().setZoom(21);
+			GeoPoint geo=mapView.getProjection().fromPixels(lanceX,lanceY);
+			Drawable drawable = this.getResources().getDrawable(R.drawable.little_dwarf);
+			HelloItemizedOverlay itemizedoverlay = new HelloItemizedOverlay(drawable, this);
+			OverlayItem overlayitem = new OverlayItem(geo, "Hola, Mundo!", "I'm in Mexico City!");
+			itemizedoverlay.addOverlay(overlayitem);
+			mapOverlays.add(itemizedoverlay);
+			mapView.getController().setZoom(16);
+			mapView.getController().animateTo(geo);
+			settings.edit().clear();
+		}
 	}
 
 
