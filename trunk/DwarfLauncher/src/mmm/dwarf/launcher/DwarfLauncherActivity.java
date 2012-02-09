@@ -11,7 +11,7 @@ public class DwarfLauncherActivity extends MapActivity{
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		//setContentView(R.layout.main);
 		
 		//Lancement de la google maps
 		Intent gmaps = new Intent(DwarfLauncherActivity.this, GoogleMapsActivity.class);

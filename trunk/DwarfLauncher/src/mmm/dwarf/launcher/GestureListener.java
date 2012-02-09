@@ -1,5 +1,6 @@
 package mmm.dwarf.launcher;
 
+import android.graphics.BitmapFactory;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.GestureDetector.OnDoubleTapListener;
@@ -33,7 +34,9 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 
     @Override  
     public boolean onDown(MotionEvent e) {  
-        Log.v("TG", "onDown");  
+        Log.v("TG", "onDown");
+        view.onResetLocation();
+        view.onMove(e.getX()-(view.nain.getWidth()/2), e.getY()-(view.nain.getHeight()/2));
         return true;  
     }  
 
