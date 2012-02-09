@@ -2,6 +2,8 @@ package mmm.dwarf.launcher;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -129,6 +131,11 @@ public class PlayAreaView extends View {
                 }  
             });  
         }else{
+        	SharedPreferences settings = this.getContext().getSharedPreferences("lance", 4);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("lanceX", (int)totalAnimDx);
+            editor.putInt("lanceY", (int)totalAnimDx);
+            editor.commit();
         	Intent intent=new Intent(this.getContext(), GoogleMapsActivity.class);
     		this.getContext().startActivity(intent);
         }
