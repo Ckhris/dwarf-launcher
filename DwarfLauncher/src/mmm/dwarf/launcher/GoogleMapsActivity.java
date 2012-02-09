@@ -32,7 +32,6 @@ public class GoogleMapsActivity extends MapActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);  
 		setContentView(R.layout.main);  
-		
 		final MapView mapView = (MapView) findViewById(R.id.mapview);
 		mapOverlays = mapView.getOverlays();
 
@@ -76,13 +75,29 @@ public class GoogleMapsActivity extends MapActivity {
 		};
 
 		// Register the listener with the Location Manager to receive location updates
-		try{
-			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+			Log.v("TestGPS", "ca marche");
 		}
-		catch(Exception e){
-			
+		else{
+			//Boite de dialogie pour activer le GPS
+			Log.v("testDialogue", "j'envoie la sauce");
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Votre GPS n'est pas activé, voulez-vous l'activer ?")
+			.setCancelable(false)
+			.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+				}
+			})
+			.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
 		}
-		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
 		String bestProvider = locationManager.getBestProvider(criteria, false);
@@ -90,6 +105,7 @@ public class GoogleMapsActivity extends MapActivity {
 		
 		
 	}
+
 
 
 	protected void afficherPoint(double latitude, double longitude) {
