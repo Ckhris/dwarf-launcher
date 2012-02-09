@@ -20,7 +20,7 @@ import android.view.animation.OvershootInterpolator;
 
 public class PlayAreaView extends View {
 	private Matrix translate;  
-	private Bitmap droid;
+	public Bitmap nain;
 	private GestureDetector gestures;
 	protected void onDraw(Canvas canvas) {  
 		//Pour la boussole utilisation d'un deuxième canvas pour ne pas interférer avec le premier
@@ -55,7 +55,7 @@ public class PlayAreaView extends View {
 		canvas.restore();
 		
 		//Dessin du nain
-		canvas.drawBitmap(droid, translate, null);  
+		canvas.drawBitmap(nain, translate, null);  
 		Matrix m = canvas.getMatrix();  
 		Log.d("TG", "Matrix: "+translate.toShortString());  
 		Log.d("TG", "Canvas: "+m.toShortString());  
@@ -65,7 +65,7 @@ public class PlayAreaView extends View {
 	    super(context);  
 	    translate = new Matrix();  
 	    gestures = new GestureDetector(context, new GestureListener(this));  
-	    droid = BitmapFactory.decodeResource(getResources(), R.drawable.little_dwarf);  
+	    nain = BitmapFactory.decodeResource(getResources(), R.drawable.little_dwarf);  
 	    //Nécessaire à la boussole
 	    initView();
 	}
