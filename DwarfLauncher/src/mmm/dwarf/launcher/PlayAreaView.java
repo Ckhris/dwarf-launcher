@@ -1,6 +1,7 @@
 package mmm.dwarf.launcher;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -127,7 +128,10 @@ public class PlayAreaView extends View {
                     onAnimateStep();  
                 }  
             });  
-        }  
+        }else{
+        	Intent intent=new Intent(this.getContext(), GoogleMapsActivity.class);
+    		this.getContext().startActivity(intent);
+        }
     }
     
     //Partie pour la boussole

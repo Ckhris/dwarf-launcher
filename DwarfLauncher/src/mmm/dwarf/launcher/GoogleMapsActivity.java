@@ -30,7 +30,7 @@ public class GoogleMapsActivity extends MapActivity {
 		super.onCreate(savedInstanceState);  
 		setContentView(R.layout.main);  
 		
-		MapView mapView = (MapView) findViewById(R.id.mapview);
+		final MapView mapView = (MapView) findViewById(R.id.mapview);
 		mapOverlays = mapView.getOverlays();
 
 		mapView.setBuiltInZoomControls(true);
@@ -52,6 +52,8 @@ public class GoogleMapsActivity extends MapActivity {
 				// Called when a new location is found by the network location provider.
 				Log.v("Chris", "onLocationChanged");
 				afficherPoint(location.getLatitude(), location.getLongitude());
+				GeoPoint g=new GeoPoint((int) (location.getLatitude()*1E6), (int)(location.getLongitude()*1E6));
+				mapView.getController().animateTo(g);
 			}
 
 			public void onStatusChanged(String provider, int status, Bundle extras) {
