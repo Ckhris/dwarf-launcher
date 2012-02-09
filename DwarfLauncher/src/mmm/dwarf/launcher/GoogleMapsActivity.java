@@ -7,9 +7,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.location.Criteria;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
@@ -35,8 +38,11 @@ public class GoogleMapsActivity extends MapActivity {
 
 		mapView.setBuiltInZoomControls(true);
 
-		Log.v("Chris", "IN");
-
+		//Activation du wifi -> A tester
+		WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+		wifi.setWifiEnabled(true);
+		
+		
 		// Acquire a reference to the system Location Manager
 		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
@@ -77,6 +83,12 @@ public class GoogleMapsActivity extends MapActivity {
 			
 		}
 		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		Criteria criteria = new Criteria();
+		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+		String bestProvider = locationManager.getBestProvider(criteria, false);
+		Log.v("Chris", "bp: "+bestProvider);
+		
+		
 	}
 
 
