@@ -45,7 +45,6 @@ public class GoogleMapsActivity extends MapActivity {
 		
 		// Acquire a reference to the system Location Manager
 		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
 		//	Log.v("Chris", "Enabled: "+!locationManager.isProviderEnabled(LOCATION_SERVICE));
 		//	if(!locationManager.isProviderEnabled(LOCATION_SERVICE)){
 		/* est vrai meme quand le gps est activ� */
