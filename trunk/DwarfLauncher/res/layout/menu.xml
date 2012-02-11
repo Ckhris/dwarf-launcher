@@ -41,7 +41,7 @@
         android:id="@+id/textView1"
         android:layout_width="200dp"
         android:layout_height="54dp"
-        android:text="     !!! Lancer moi !!!!    "
+        android:text="     !!! Lancez moi !!!!    "
         android:textAppearance="?android:attr/textAppearanceLarge" />
         
     </LinearLayout>
@@ -78,6 +78,7 @@
             android:id="@+id/imageButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+              android:onClick="details"
             android:src="@drawable/ic_detail" />
 
         <TextView
