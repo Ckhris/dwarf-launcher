@@ -7,18 +7,18 @@ import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 
 public class GestureListener implements OnGestureListener, OnDoubleTapListener {
-	
-	PlayAreaView view;  
-    public GestureListener(PlayAreaView view) {  
-        this.view = view;  
-    }
 
-    @Override  
-    public boolean onDoubleTap(MotionEvent e) {  
-        //Log.v("TG", "onDoubleTap");  
-        view.onResetLocation();  
-        return true;  
-    }  
+	PlayAreaView view;  
+	public GestureListener(PlayAreaView view) {  
+		this.view = view;  
+	}
+
+	@Override  
+	public boolean onDoubleTap(MotionEvent e) {  
+		//Log.v("TG", "onDoubleTap");  
+		view.onResetLocation();  
+		return true;  
+	}  
 
 	@Override
 	public boolean onDoubleTapEvent(MotionEvent arg0) {
@@ -32,26 +32,28 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 		return false;
 	}
 
-    @Override  
-    public boolean onDown(MotionEvent e) {  
-        //Log.v("TG", "onDown");
-        view.onResetLocation();
-        view.onMove(e.getX()-(view.nain.getWidth()/2), e.getY()-(view.nain.getHeight()/2));
-        return true;  
-    }  
+	@Override  
+	public boolean onDown(MotionEvent e) {  
+		//Log.v("TG", "onDown");
+		view.onResetLocation();
+		view.onMove(e.getX()-(view.nain.getWidth()/2), e.getY()-(view.nain.getHeight()/2));
+		return true;  
+	}  
 
-    @Override  
-    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, final float velocityY) {  
-        //Log.v("TG", "onFling");  
-        velocityX=0;
-        final float distanceTimeFactor = 0.4f;  
-        final float totalDx = (distanceTimeFactor * velocityX/2);  
-        final float totalDy = (distanceTimeFactor * velocityY/2);  
-      
-        view.onAnimateMove(totalDx, totalDy,  
-                (long) (1000 * distanceTimeFactor));  
-        return true;  
-    }
+	@Override  
+	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, final float velocityY) {  
+		//Log.v("TG", "onFling");  
+		velocityX=0;
+		final float distanceTimeFactor = 0.4f;  
+		final float totalDx = (distanceTimeFactor * velocityX/2);  
+		final float totalDy = (distanceTimeFactor * velocityY/2);  
+
+		view.onAnimateMove(totalDx, totalDy,  
+				(long) (1000 * distanceTimeFactor));
+		view.setVelocity(velocityY);
+		view.calculateDistance();
+		return true;
+	}
 
 	@Override
 	public void onLongPress(MotionEvent e) {
@@ -59,13 +61,13 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 
 	}
 
-    @Override  
-    public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {  
-        //Log.v("TG", "onScroll");  
-      
-        view.onMove(-distanceX, -distanceY);  
-        return true;  
-    }  
+	@Override  
+	public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {  
+		//Log.v("TG", "onScroll");  
+
+		view.onMove(-distanceX, -distanceY);  
+		return true;  
+	}  
 
 	@Override
 	public void onShowPress(MotionEvent e) {
