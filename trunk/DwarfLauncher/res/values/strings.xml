@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="hello">Hello World, DwarfLauncherActivity!</string>
     <string name="app_name">Dwarf Launcher</string>
     <string name="graphics_holder">Dwarf launch plateform</string>
     <string name="google_maps">Dwarf launch gMaps</string>
-
 </resources>
