@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
 
@@ -45,6 +46,11 @@ public class HelloItemizedOverlay extends com.google.android.maps.ItemizedOverla
 	  dialog.setTitle(item.getTitle());
 	  dialog.setMessage(item.getSnippet());
 	  dialog.show();*/
+		SharedPreferences settings = mContext.getSharedPreferences("lance", 4);
+		SharedPreferences.Editor editor = settings.edit();
+		DwarfOverlayItem dwarf=mOverlays.get(index);
+		editor.putLong("idTouch", dwarf.getId());
+		editor.commit();
 		Intent intent=new Intent(mContext, LaunchPlateformActivity.class);
 		mContext.startActivity(intent);
 		return true;
