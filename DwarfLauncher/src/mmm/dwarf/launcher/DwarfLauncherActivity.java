@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +34,10 @@ public class DwarfLauncherActivity extends Activity{
 
 	public void jouer(View MenuView) {
 		//Lancer le nain
+		SharedPreferences settings = this.getSharedPreferences("lance", 4);
+		SharedPreferences.Editor editor = settings.edit();
+		editor.putInt("idTouch", -1);
+		editor.commit();
 		Intent intent=new Intent(DwarfLauncherActivity.this, LaunchPlateformActivity.class);
 		startActivity(intent);
 

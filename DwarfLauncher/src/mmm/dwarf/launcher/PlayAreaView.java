@@ -138,6 +138,7 @@ public class PlayAreaView extends View {
 			SharedPreferences settings = this.getContext().getSharedPreferences("lance", 4);
 			SharedPreferences.Editor editor = settings.edit();
 			int idTouch=settings.getInt("idTouch", 0);
+			calculateCoord(idTouch);
 			Intent intent=new Intent(this.getContext(), GoogleMapsActivity.class);
 			this.getContext().startActivity(intent);
 		}
