@@ -56,7 +56,7 @@ public class GoogleMapsActivity extends MapActivity {
 		List<Dwarf> dwarfs = ds.getAllDwarfs();
 		ds.close();
 		for (Dwarf dwarf : dwarfs) {
-			afficherPoint(dwarf.getLatitude(), dwarf.getLongitude());
+			afficherPoint(dwarf.getLatitude(), dwarf.getLongitude(),dwarf.getId());
 		}
 		
 		
@@ -81,7 +81,7 @@ public class GoogleMapsActivity extends MapActivity {
 			GeoPoint geo=mapView.getProjection().fromPixels(lanceX,lanceY);
 			Drawable drawable = this.getResources().getDrawable(R.drawable.little_dwarf);
 			HelloItemizedOverlay itemizedoverlay = new HelloItemizedOverlay(drawable, this);
-			OverlayItem overlayitem = new OverlayItem(geo, "Hola, Mundo!", "I'm in Mexico City!");
+			DwarfOverlayItem overlayitem = new DwarfOverlayItem(geo, "Hola, Mundo!", "I'm in Mexico City!",1);
 			itemizedoverlay.addOverlay(overlayitem);
 			mapOverlays.add(itemizedoverlay);
 			mapView.getController().setZoom(16);
@@ -92,14 +92,14 @@ public class GoogleMapsActivity extends MapActivity {
 
 
 
-	protected void afficherPoint(double latitude, double longitude) {
+	protected void afficherPoint(double latitude, double longitude,long id) {
 		latitude = latitude* 1E6;
 		longitude = longitude* 1E6;
 		Log.v("Chris", "Afficher Point : "+latitude+" / "+longitude);
 		GeoPoint gp = new GeoPoint((int) latitude, (int) longitude);
 		Drawable drawable = this.getResources().getDrawable(R.drawable.little_dwarf);
 		HelloItemizedOverlay itemizedoverlay = new HelloItemizedOverlay(drawable, this);
-		OverlayItem overlayitem = new OverlayItem(gp, "Hola, Mundo!", "I'm in Mexico City!");
+		DwarfOverlayItem overlayitem = new DwarfOverlayItem(gp, "Hola, Mundo!", "I'm in Mexico City!",id);
 		itemizedoverlay.addOverlay(overlayitem);
 		mapOverlays.add(itemizedoverlay);
 	}

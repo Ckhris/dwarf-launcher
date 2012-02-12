@@ -11,7 +11,7 @@ import com.google.android.maps.OverlayItem;
 
 public class HelloItemizedOverlay extends com.google.android.maps.ItemizedOverlay {
 
-	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+	private ArrayList<DwarfOverlayItem> mOverlays = new ArrayList<DwarfOverlayItem>();
 	private Context mContext;
 
 	public HelloItemizedOverlay(Drawable defaultMarker) {
@@ -23,13 +23,13 @@ public class HelloItemizedOverlay extends com.google.android.maps.ItemizedOverla
 		mContext = context;
 	}
 
-	public void addOverlay(OverlayItem overlay) {
+	public void addOverlay(DwarfOverlayItem overlay) {
 		mOverlays.add(overlay);
 		populate();
 	}
 
 	@Override
-	protected OverlayItem createItem(int i) {
+	protected DwarfOverlayItem createItem(int i) {
 		return mOverlays.get(i);
 	}
 
