@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.provider.SyncStateContract.Columns;
 import android.util.Log;
 
+//Requetes Ajout/insert/suppression
 public class DwarfsDataSource {
 	// Database fields
 		private SQLiteDatabase database;
@@ -40,6 +41,14 @@ public class DwarfsDataSource {
 			values.put(MySQLiteHelper.COLUMN_LONGITUDE, dwarf.getLongitude());
 			//on insère l'objet dans la BDD via le ContentValues
 			return database.insert(MySQLiteHelper.TABLE_DWARFS, null, values);
+		}
+		
+		public long updateDwarf(Dwarf dwarf){
+			ContentValues args = new ContentValues();
+			args.put(MySQLiteHelper.COLUMN_LATITUDE, dwarf.getLatitude());
+			args.put(MySQLiteHelper.COLUMN_LONGITUDE, dwarf.getLongitude());
+			//on insère l'objet dans la BDD via le ContentValues
+			return database.update(MySQLiteHelper.TABLE_DWARFS, args, "_id="+dwarf.getId(), null);
 		}
 
 		public void deleteDwarf(Dwarf dwarf) {

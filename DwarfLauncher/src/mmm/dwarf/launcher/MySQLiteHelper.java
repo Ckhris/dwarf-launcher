@@ -22,8 +22,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 			+ COLUMN_LATITUDE + " double not null, "
 			+ COLUMN_LONGITUDE + " double not null);";
 
-	public MySQLiteHelper(Context context, String name, CursorFactory factory, int version) {
-			super(context, name, factory, version);
+	public MySQLiteHelper(Context context, String name, CursorFactory factory, int version) {	
+		super(context, name, factory, version);
 	}
 
 	@Override
@@ -34,10 +34,8 @@ public class MySQLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.w(MySQLiteHelper.class.getName(),
-				"Upgrading database from version " + oldVersion + " to "
-						+ newVersion + ", which will destroy all old data");
-		db.execSQL("DROP TABLE IF EXISTS" + TABLE_DWARFS);
+		Log.v("Chris", "DROP TABLE");
+		db.execSQL("DROP TABLE IF EXISTS " + TABLE_DWARFS);
 		onCreate(db);
 	}
 
