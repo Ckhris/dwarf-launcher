@@ -61,7 +61,7 @@ public class HelloItemizedOverlay extends com.google.android.maps.ItemizedOverla
 		loc.setLatitude(latitude);
 		loc.setLongitude(longitude);
 		
-		if(location.distanceTo(loc)>50){
+		if(location.distanceTo(loc)<50){
 
 			SharedPreferences settings = mContext.getSharedPreferences("lance", 4);
 			SharedPreferences.Editor editor = settings.edit();
@@ -70,7 +70,8 @@ public class HelloItemizedOverlay extends com.google.android.maps.ItemizedOverla
 			Intent intent=new Intent(mContext, LaunchPlateformActivity.class);
 			mContext.startActivity(intent);
 		}else{
-			Toast.makeText(mContext, "Nain trop loin! Rapproche toi feignant!", Toast.LENGTH_LONG);
+			Toast toast = Toast.makeText(mContext, "Nain trop loin! Rapproche toi feignant!", Toast.LENGTH_LONG);
+			toast.show();
 		}
 		return true;
 	}
