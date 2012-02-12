@@ -24,6 +24,7 @@ import com.google.android.maps.OverlayItem;
 
 public class GoogleMapsActivity extends MapActivity {
 
+	private DwarfsDataSource ds;
 	private LocationListener locationListener;
 	private LocationManager locationManager;
 	private double latitude;
@@ -46,11 +47,19 @@ public class GoogleMapsActivity extends MapActivity {
 		// Acquire a reference to the system Location Manager
 		//LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		
-		LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE); 
-		Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		longitude = location.getLongitude();
-		latitude = location.getLatitude();
-		afficherPoint(latitude, longitude);
+//		LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE); 
+//		Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//		longitude = location.getLongitude();
+//		latitude = location.getLatitude();
+		ds = new DwarfsDataSource(this);
+		ds.open();
+		List<Dwarf> dwarfs = ds.getAllDwarfs();
+		ds.close();
+		for (Dwarf dwarf : dwarfs) {
+			afficherPoint(dwarf.getLatitude(), dwarf.getLongitude());
+		}
+		
+		
 		
 //		// Register the listener with the Location Manager to receive location updates
 //		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
