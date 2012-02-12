@@ -15,7 +15,7 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 
     @Override  
     public boolean onDoubleTap(MotionEvent e) {  
-        Log.v("TG", "onDoubleTap");  
+        //Log.v("TG", "onDoubleTap");  
         view.onResetLocation();  
         return true;  
     }  
@@ -34,15 +34,16 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 
     @Override  
     public boolean onDown(MotionEvent e) {  
-        Log.v("TG", "onDown");
+        //Log.v("TG", "onDown");
         view.onResetLocation();
         view.onMove(e.getX()-(view.nain.getWidth()/2), e.getY()-(view.nain.getHeight()/2));
         return true;  
     }  
 
     @Override  
-    public boolean onFling(MotionEvent e1, MotionEvent e2, final float velocityX, final float velocityY) {  
-        Log.v("TG", "onFling");  
+    public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, final float velocityY) {  
+        //Log.v("TG", "onFling");  
+        velocityX=0;
         final float distanceTimeFactor = 0.4f;  
         final float totalDx = (distanceTimeFactor * velocityX/2);  
         final float totalDy = (distanceTimeFactor * velocityY/2);  
@@ -60,7 +61,7 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 
     @Override  
     public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {  
-        Log.v("TG", "onScroll");  
+        //Log.v("TG", "onScroll");  
       
         view.onMove(-distanceX, -distanceY);  
         return true;  

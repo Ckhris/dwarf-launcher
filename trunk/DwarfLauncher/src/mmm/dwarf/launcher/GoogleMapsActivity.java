@@ -9,16 +9,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
-import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
@@ -27,7 +23,8 @@ import com.google.android.maps.OverlayItem;
 
 public class GoogleMapsActivity extends MapActivity {
 
-	private LocationManager manager;
+	private LocationListener locationListener;
+	private LocationManager locationManager;
 	private List<Overlay> mapOverlays; 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,15 +41,9 @@ public class GoogleMapsActivity extends MapActivity {
 		
 		
 		// Acquire a reference to the system Location Manager
-		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		//	Log.v("Chris", "Enabled: "+!locationManager.isProviderEnabled(LOCATION_SERVICE));
-		//	if(!locationManager.isProviderEnabled(LOCATION_SERVICE)){
-		/* est vrai meme quand le gps est activ� */
-		//		Log.v("Chris", "Dans le IF");
-		//		buildAlertMessageNoGps();
-		//	}
+		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		// Define a listener that responds to location updates
-		LocationListener locationListener = new LocationListener() {
+		locationListener = new LocationListener() {
 			public void onLocationChanged(Location location) {
 				// Called when a new location is found by the network location provider.
 				Log.v("Chris", "onLocationChanged");
@@ -76,29 +67,15 @@ public class GoogleMapsActivity extends MapActivity {
 		};
 
 		// Register the listener with the Location Manager to receive location updates
-		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+		
+		try{
 			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-			Log.v("TestGPS", "ca marche");
+			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 		}
-		else{
-			//Boite de dialogie pour activer le GPS
-			Log.v("testDialogue", "j'envoie la sauce");
-			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			builder.setMessage("Votre GPS n'est pas activé, voulez-vous l'activer ?")
-			.setCancelable(false)
-			.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
-				}
-			})
-			.setNegativeButton("Non", new DialogInterface.OnClickListener() {
-				public void onClick(DialogInterface dialog, int id) {
-					dialog.cancel();
-				}
-			});
-			AlertDialog alert = builder.create();
-			alert.show();
+		catch(Exception e){
+			
 		}
+		
 		Criteria criteria = new Criteria();
 		criteria.setAccuracy(Criteria.ACCURACY_FINE);
 		String bestProvider = locationManager.getBestProvider(criteria, false);
@@ -135,30 +112,31 @@ public class GoogleMapsActivity extends MapActivity {
 		mapOverlays.add(itemizedoverlay);
 	}
 
-
-	private void afficherToast(String message){
-		Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
+	public void onResume(){
+		super.onResume();
+		
+		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		}
+		else{
+			//Boite de dialogie pour activer le GPS
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Votre GPS n'est pas activé, voulez-vous l'activer ?")
+			.setCancelable(false)
+			.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					startActivityForResult(new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS), 0);
+				}
+			})
+			.setNegativeButton("Non", new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int id) {
+					dialog.cancel();
+				}
+			});
+			AlertDialog alert = builder.create();
+			alert.show();
+		}
 	}
-
-	private void buildAlertMessageNoGps() {
-		Log.v("Chris", "In buildAlertMessageNoGps");
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		builder.setMessage("Votre GPS semble d�sactiver, Voulez-vous l'activer?")
-		.setCancelable(false)
-		.setPositiveButton("Oui", new DialogInterface.OnClickListener() {
-			public void onClick(@SuppressWarnings("unused") final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-				startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-			}
-		})
-		.setNegativeButton("Non", new DialogInterface.OnClickListener() {
-			public void onClick(final DialogInterface dialog, @SuppressWarnings("unused") final int id) {
-				dialog.cancel();
-			}
-		});
-		final AlertDialog alert = builder.create();
-		alert.show();
-	}
-
 
 	@Override
 	protected boolean isRouteDisplayed() {
