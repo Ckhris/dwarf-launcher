@@ -78,7 +78,7 @@
             android:id="@+id/imageButton3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-              android:onClick="details"
+            android:onClick="detailsgame"
             android:src="@drawable/ic_detail" />
 
         <TextView
