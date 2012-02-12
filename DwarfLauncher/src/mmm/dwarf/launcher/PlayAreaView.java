@@ -60,8 +60,8 @@ public class PlayAreaView extends View {
 		//Dessin du nain
 		canvas.drawBitmap(nain, translate, null);  
 		Matrix m = canvas.getMatrix();  
-		Log.d("TG", "Matrix: "+translate.toShortString());  
-		Log.d("TG", "Canvas: "+m.toShortString());  
+		//Log.d("TG", "Matrix: "+translate.toShortString());  
+		//Log.d("TG", "Canvas: "+m.toShortString());  
 	}
 	
 	public PlayAreaView(Context context) {  
