@@ -7,8 +7,9 @@ import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorListener;
 import android.hardware.SensorManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.FrameLayout;
@@ -17,6 +18,8 @@ public class LaunchPlateformActivity extends Activity {
 
 	private PlayAreaView image;
 	private Sensor sensorRotation;
+	private Dwarf newDwarf;
+	private DwarfsDataSource ds;
 
 	@Override  
 	public void onCreate(Bundle savedInstanceState) {  
@@ -38,6 +41,15 @@ public class LaunchPlateformActivity extends Activity {
 		if (sensorGyro.size() > 0){
 			sensorRotation = sensorGyro.get(0);
 		}
+		
+		ds = new DwarfsDataSource(this);
+		LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE); 
+		Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		newDwarf = new Dwarf(location.getLatitude(), location.getLongitude());
+		ds.open();
+		ds.createDwarf(newDwarf);
+		ds.close();
+		Log.v("Chris", "Insert");
 	}  
 
 
