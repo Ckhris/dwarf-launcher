@@ -66,6 +66,7 @@ public class LaunchPlateformActivity extends Activity {
 		public void onSensorChanged(SensorEvent event) {
 			// TODO Auto-generated method stub
 			angle=event.values[1];
+			image.setAngle(angle);
 		}
 
 		@Override
@@ -74,7 +75,7 @@ public class LaunchPlateformActivity extends Activity {
 
 		}
 	};
-
+	
 	protected void onResume(){
 		super.onResume();
 		sensorManager.registerListener(sensorListener, sensor, sensorManager.SENSOR_DELAY_NORMAL);
