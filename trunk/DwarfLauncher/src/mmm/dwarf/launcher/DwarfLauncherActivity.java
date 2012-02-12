@@ -20,16 +20,6 @@ public class DwarfLauncherActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.menu);	
 		
-	    //CrŽation d'une instance de ma classe LivresBDD
-        DwarfsDataSource dwarfDS = new DwarfsDataSource(this);
-        //CrŽation d'un livre
-        Dwarf dwarf = new Dwarf(48.13002, -1.64911);
-        //On ouvre la base de donnŽes pour Žcrire dedans
-        dwarfDS.open();
-        //On ins�re le livre que l'on vient de crŽer
-        int success = dwarfDS.createDwarf(dwarf);
-        dwarfDS.close();
-		
 	}
 
 	public void jouer(View MenuView) {
