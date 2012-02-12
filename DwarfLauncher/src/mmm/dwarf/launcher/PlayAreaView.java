@@ -25,6 +25,9 @@ public class PlayAreaView extends View {
 	private Matrix translate;  
 	public Bitmap nain;
 	private GestureDetector gestures;
+	private DwarfsDataSource dataSource;
+	public float velocityX;
+	public float velocityY;
 	protected void onDraw(Canvas canvas) {  
 		//Pour la boussole utilisation d'un deuxième canvas pour ne pas interférer avec le premier
 		//centre de la vue
@@ -64,13 +67,14 @@ public class PlayAreaView extends View {
 		//Log.d("TG", "Canvas: "+m.toShortString());  
 	}
 
-	public PlayAreaView(Context context) {  
-		super(context);  
-		translate = new Matrix();  
-		gestures = new GestureDetector(context, new GestureListener(this));  
-		nain = BitmapFactory.decodeResource(getResources(), R.drawable.little_dwarf);  
-		//Nécessaire à la boussole
-		initView();
+	public PlayAreaView(Context context) {
+	    super(context);
+	    dataSource= new DwarfsDataSource(context);
+	    translate = new Matrix();  
+	    gestures = new GestureDetector(context, new GestureListener(this));  
+	    nain = BitmapFactory.decodeResource(getResources(), R.drawable.little_dwarf);  
+	    //Nécessaire à la boussole
+	    initView();
 	}
 
 	@Override
@@ -133,9 +137,7 @@ public class PlayAreaView extends View {
 		}else{
 			SharedPreferences settings = this.getContext().getSharedPreferences("lance", 4);
 			SharedPreferences.Editor editor = settings.edit();
-			editor.putInt("lanceX", (int)totalAnimDx);
-			editor.putInt("lanceY", (int)totalAnimDx);
-			editor.commit();
+			int idTouch=settings.getInt("idTouch", 0);
 			Intent intent=new Intent(this.getContext(), GoogleMapsActivity.class);
 			this.getContext().startActivity(intent);
 		}
@@ -250,5 +252,4 @@ public class PlayAreaView extends View {
 		longitude=lon+Math.atan2(Math.sin(angle)*Math.sin((double) distance/R)*Math.cos(lat), Math.cos((double) distance/R)-Math.sin(lat)*Math.sin(latitude));
 
 	}
-
 }
