@@ -33,14 +33,14 @@ public class DwarfsDataSource {
 		dbHelper.close();
 	}
 
-	public long createDwarf(Dwarf dwarf) {
+	public int createDwarf(Dwarf dwarf) {
 		//Création d'un ContentValues (fonctionne comme une HashMap)
 		ContentValues values = new ContentValues();
 		//on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
 		values.put(MySQLiteHelper.COLUMN_LATITUDE, dwarf.getLatitude());
 		values.put(MySQLiteHelper.COLUMN_LONGITUDE, dwarf.getLongitude());
 		//on insère l'objet dans la BDD via le ContentValues
-		return database.insert(MySQLiteHelper.TABLE_DWARFS, null, values);
+		return (int) database.insert(MySQLiteHelper.TABLE_DWARFS, null, values);
 	}
 
 	public long updateDwarf(Dwarf dwarf){
