@@ -3,9 +3,12 @@ package mmm.dwarf.launcher;
 import java.util.List;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 
 public class DwarfLauncherActivity extends Activity{
@@ -16,13 +19,13 @@ public class DwarfLauncherActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.menu);	
 		
-	    //Création d'une instance de ma classe LivresBDD
+	    //Cr≈Ωation d'une instance de ma classe LivresBDD
         DwarfsDataSource dwarfDS = new DwarfsDataSource(this);
-        //Création d'un livre
+        //Cr≈Ωation d'un livre
         Dwarf dwarf = new Dwarf(48.13002, -1.64911);
-        //On ouvre la base de données pour écrire dedans
+        //On ouvre la base de donn≈Ωes pour ≈Ωcrire dedans
         dwarfDS.open();
-        //On insère le livre que l'on vient de créer
+        //On insÔøΩre le livre que l'on vient de cr≈Ωer
         Long success = dwarfDS.createDwarf(dwarf);
         dwarfDS.close();
 		
@@ -34,11 +37,38 @@ public class DwarfLauncherActivity extends Activity{
 		startActivity(intent);
 
 	}
-
+	public void detailsgame(View MenuView) {
+		//On instancie notre layout en tant que View
+        LayoutInflater factory = LayoutInflater.from(this);
+        final View alertDialogView = factory.inflate(R.layout.details, null);
+ 
+        //Cr√©ation de l'AlertDialog
+        final AlertDialog.Builder adb = new AlertDialog.Builder(this);
+ 
+        //On affecte la vue personnalis√© que l'on a cr√©e √† notre AlertDialog
+        adb.setView(alertDialogView);
+ 
+        //On donne un titre √† l'AlertDialog
+        adb.setTitle("D√©tails de l'application");
+        adb.setNegativeButton("OK", new DialogInterface.OnClickListener() {
+			
+			@Override
+			public void onClick(DialogInterface dialog, int which) {
+				// TODO Auto-generated method stub
+				adb.setCancelable(isFinishing());
+			}
+		});
+ 
+      adb.show();
+		
+	}
 	public void afficherMap(View MenuView) {
 		//Lancement de la google maps
 		Intent gmaps = new Intent(DwarfLauncherActivity.this, GoogleMapsActivity.class);
 		startActivity(gmaps);
 
 	}
+	
+	
+
 }
