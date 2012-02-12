@@ -12,6 +12,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.location.LocationProvider;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,7 +26,10 @@ public class GoogleMapsActivity extends MapActivity {
 
 	private LocationListener locationListener;
 	private LocationManager locationManager;
-	private List<Overlay> mapOverlays; 
+	private double latitude;
+	private double longitude;
+	private List<Overlay> mapOverlays;
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);  
@@ -35,51 +39,30 @@ public class GoogleMapsActivity extends MapActivity {
 
 		mapView.setBuiltInZoomControls(true);
 
-		//Activation du wifi -> A tester
+		//Activation du wifi sans autorisation -> Pas top
 		WifiManager wifi = (WifiManager) getSystemService(Context.WIFI_SERVICE);
 		wifi.setWifiEnabled(true);
 		
-		
 		// Acquire a reference to the system Location Manager
-		locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-		// Define a listener that responds to location updates
-		locationListener = new LocationListener() {
-			public void onLocationChanged(Location location) {
-				// Called when a new location is found by the network location provider.
-				Log.v("Chris", "onLocationChanged");
-				afficherPoint(location.getLatitude(), location.getLongitude());
-				GeoPoint g=new GeoPoint((int) (location.getLatitude()*1E6), (int)(location.getLongitude()*1E6));
-				mapView.getController().setZoom(16);
-				mapView.getController().animateTo(g);
-			}
-
-			public void onStatusChanged(String provider, int status, Bundle extras) {
-				Log.v("Chris", "onStatusChanged");
-			}
-
-			public void onProviderEnabled(String provider) {
-				Log.v("Chris", "onProviderEnabled");
-			}
-
-			public void onProviderDisabled(String provider) {
-				Log.v("Chris", "onProviderDisabled");
-			}
-		};
-
-		// Register the listener with the Location Manager to receive location updates
+		//LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 		
-		try{
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-			locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-		}
-		catch(Exception e){
-			
-		}
+		LocationManager lm = (LocationManager)getSystemService(Context.LOCATION_SERVICE); 
+		Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		longitude = location.getLongitude();
+		latitude = location.getLatitude();
+		afficherPoint(latitude, longitude);
 		
-		Criteria criteria = new Criteria();
-		criteria.setAccuracy(Criteria.ACCURACY_FINE);
-		String bestProvider = locationManager.getBestProvider(criteria, false);
-		Log.v("Chris", "bp: "+bestProvider);
+//		// Register the listener with the Location Manager to receive location updates
+//		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
+//			Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//			latitude = lastLocation.getLatitude();
+//			longitude = lastLocation.getLongitude();
+//		}
+//		else{
+//			//Boite de dialogie pour activer le GPS
+//			Log.v("testDialogue", "j'envoie la sauce");
+//			buildAlertMessageNoGps();
+//		}		
 		
 		SharedPreferences settings= getSharedPreferences("lance", 4);
 		if(settings.getInt("lanceX", 0)!=0){
@@ -112,13 +95,7 @@ public class GoogleMapsActivity extends MapActivity {
 		mapOverlays.add(itemizedoverlay);
 	}
 
-	public void onResume(){
-		super.onResume();
-		
-		if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)){
-			locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
-		}
-		else{
+	public void buildAlertMessageNoGps(){
 			//Boite de dialogie pour activer le GPS
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
 			builder.setMessage("Votre GPS n'est pas activé, voulez-vous l'activer ?")
@@ -135,7 +112,6 @@ public class GoogleMapsActivity extends MapActivity {
 			});
 			AlertDialog alert = builder.create();
 			alert.show();
-		}
 	}
 
 	@Override
