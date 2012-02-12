@@ -58,8 +58,8 @@ public class DwarfsDataSource {
 				+ " = " + id, null);
 	}
 
-	public Dwarf getDwarf(String id){
-		   Cursor c=database.rawQuery("SELECT * FROM "+MySQLiteHelper.TABLE_DWARFS+" WHERE "+MySQLiteHelper.COLUMN_ID+"=?", new String []{id});
+	public Dwarf getDwarf(int id){
+		   Cursor c=database.rawQuery("SELECT * FROM "+MySQLiteHelper.TABLE_DWARFS+" WHERE "+MySQLiteHelper.COLUMN_ID+"=?", new String []{id+""});
 		   c.moveToFirst();
 		   return cursorToDwarf(c);  
 	}
