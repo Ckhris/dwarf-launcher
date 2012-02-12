@@ -27,7 +27,7 @@ public class DwarfLauncherActivity extends Activity{
         //On ouvre la base de donnŽes pour Žcrire dedans
         dwarfDS.open();
         //On ins�re le livre que l'on vient de crŽer
-        Long success = dwarfDS.createDwarf(dwarf);
+        int success = dwarfDS.createDwarf(dwarf);
         dwarfDS.close();
 		
 	}
@@ -36,7 +36,7 @@ public class DwarfLauncherActivity extends Activity{
 		//Lancer le nain
 		SharedPreferences settings = this.getSharedPreferences("lance", 4);
 		SharedPreferences.Editor editor = settings.edit();
-		editor.putInt("idTouch", -1);
+		editor.putLong("idTouch", -1);
 		editor.commit();
 		Intent intent=new Intent(DwarfLauncherActivity.this, LaunchPlateformActivity.class);
 		startActivity(intent);
