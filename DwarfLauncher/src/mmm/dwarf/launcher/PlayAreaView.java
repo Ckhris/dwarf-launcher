@@ -14,6 +14,8 @@ import android.graphics.Path;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.location.Location;
+import android.location.LocationManager;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -138,7 +140,11 @@ public class PlayAreaView extends View {
 			SharedPreferences settings = this.getContext().getSharedPreferences("lance", 4);
 			SharedPreferences.Editor editor = settings.edit();
 			long idTouch=settings.getLong("idTouch", 0);
-			calculateCoord(idTouch);
+			dataSource = new DwarfsDataSource(this.getContext());
+			
+			LocationManager lm = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
+			Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			calculateCoord(location.getLatitude(), location.getLongitude(), idTouch);
 			Intent intent=new Intent(this.getContext(), GoogleMapsActivity.class);
 			this.getContext().startActivity(intent);
 		}
@@ -244,13 +250,24 @@ public class PlayAreaView extends View {
 		this.distance = (float) (((velocity*velocity)/g)*Math.sin(angle));
 	}
 
-
-	public void calculateCoord(double lat, double lon, int id){
+	//Calcul les nouvelles coord et Insere un nain
+	public void calculateCoord(double lat, double lon, long id){
 		final float R = 6371;
 		double latitude;
 		double longitude;
 		latitude=Math.asin(Math.sin(lat)*Math.cos((double) distance/R)+Math.cos(lat)*Math.sin((double)distance/R)*Math.cos(angle));
 		longitude=lon+Math.atan2(Math.sin(angle)*Math.sin((double) distance/R)*Math.cos(lat), Math.cos((double) distance/R)-Math.sin(lat)*Math.sin(latitude));
-
+		Dwarf newDwarf = new Dwarf(latitude, longitude);
+		
+		dataSource.open();
+		if(id == -1){
+			dataSource.createDwarf(newDwarf);
+			Log.v("Debug", "CreateDwarf");
+		} else {
+			newDwarf.setId(id);
+			dataSource.updateDwarf(newDwarf);
+			Log.v("Debug", "UpdateDwarf");
+		}
+		dataSource.close();
 	}
 }
