@@ -34,12 +34,12 @@ public class DwarfsDataSource {
 	}
 
 	public int createDwarf(Dwarf dwarf) {
-		//Création d'un ContentValues (fonctionne comme une HashMap)
+		//CrÔøΩation d'un ContentValues (fonctionne comme une HashMap)
 		ContentValues values = new ContentValues();
-		//on lui ajoute une valeur associé à une clé (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
+		//on lui ajoute une valeur associÔøΩ ÔøΩ une clÔøΩ (qui est le nom de la colonne dans laquelle on veut mettre la valeur)
 		values.put(MySQLiteHelper.COLUMN_LATITUDE, dwarf.getLatitude());
 		values.put(MySQLiteHelper.COLUMN_LONGITUDE, dwarf.getLongitude());
-		//on insère l'objet dans la BDD via le ContentValues
+		//on insÔøΩre l'objet dans la BDD via le ContentValues
 		return (int) database.insert(MySQLiteHelper.TABLE_DWARFS, null, values);
 	}
 
@@ -47,7 +47,7 @@ public class DwarfsDataSource {
 		ContentValues args = new ContentValues();
 		args.put(MySQLiteHelper.COLUMN_LATITUDE, dwarf.getLatitude());
 		args.put(MySQLiteHelper.COLUMN_LONGITUDE, dwarf.getLongitude());
-		//on insère l'objet dans la BDD via le ContentValues
+		//on insÔøΩre l'objet dans la BDD via le ContentValues
 		return database.update(MySQLiteHelper.TABLE_DWARFS, args, "_id="+dwarf.getId(), null);
 	}
 
@@ -58,7 +58,7 @@ public class DwarfsDataSource {
 				+ " = " + id, null);
 	}
 
-	public Dwarf getDwarf(int id){
+	public Dwarf getDwarf(long id){
 		   Cursor c=database.rawQuery("SELECT * FROM "+MySQLiteHelper.TABLE_DWARFS+" WHERE "+MySQLiteHelper.COLUMN_ID+"=?", new String []{id+""});
 		   c.moveToFirst();
 		   return cursorToDwarf(c);  
