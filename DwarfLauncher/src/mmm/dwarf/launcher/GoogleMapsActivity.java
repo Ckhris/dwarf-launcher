@@ -95,7 +95,7 @@ public class GoogleMapsActivity extends MapActivity {
 	protected void afficherPoint(double latitude, double longitude,long id) {
 		latitude = latitude* 1E6;
 		longitude = longitude* 1E6;
-		Log.v("Chris", "Afficher Point : "+latitude+" / "+longitude);
+		//Log.v("Chris", "Afficher Point : "+latitude+" / "+longitude);
 		GeoPoint gp = new GeoPoint((int) latitude, (int) longitude);
 		Drawable drawable = this.getResources().getDrawable(R.drawable.little_dwarf);
 		HelloItemizedOverlay itemizedoverlay = new HelloItemizedOverlay(drawable, this);

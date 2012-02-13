@@ -70,13 +70,13 @@ public class PlayAreaView extends View {
 	}
 
 	public PlayAreaView(Context context) {
-	    super(context);
-	    dataSource= new DwarfsDataSource(context);
-	    translate = new Matrix();  
-	    gestures = new GestureDetector(context, new GestureListener(this));  
-	    nain = BitmapFactory.decodeResource(getResources(), R.drawable.little_dwarf);  
-	    //Nécessaire à la boussole
-	    initView();
+		super(context);
+		dataSource= new DwarfsDataSource(context);
+		translate = new Matrix();  
+		gestures = new GestureDetector(context, new GestureListener(this));  
+		nain = BitmapFactory.decodeResource(getResources(), R.drawable.little_dwarf);  
+		//Nécessaire à la boussole
+		initView();
 	}
 
 	@Override
@@ -128,7 +128,7 @@ public class PlayAreaView extends View {
 		translate.set(animateStart);  
 		onMove(curDx, curDy);  
 
-		Log.v("TG", "We're " + percentDistance + " of the way there!");  
+		//Log.v("TG", "We're " + percentDistance + " of the way there!");  
 		if (percentTime < 1.0f) {  
 			post(new Runnable() {  
 				@Override  
@@ -141,10 +141,7 @@ public class PlayAreaView extends View {
 			SharedPreferences.Editor editor = settings.edit();
 			long idTouch=settings.getLong("idTouch", 0);
 			dataSource = new DwarfsDataSource(this.getContext());
-			
-			LocationManager lm = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
-			Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			calculateCoord(location.getLatitude(), location.getLongitude(), idTouch);
+			calculateCoord(idTouch);
 			Intent intent=new Intent(this.getContext(), GoogleMapsActivity.class);
 			this.getContext().startActivity(intent);
 		}
@@ -228,7 +225,7 @@ public class PlayAreaView extends View {
 	public void setVelocity(float velocity){
 		this.velocity=velocity;
 	}
-	
+
 	public float getAngle(){
 		return angle;
 	}
@@ -236,7 +233,7 @@ public class PlayAreaView extends View {
 	public void setAngle(float angle){
 		this.angle=angle;
 	}
-	
+
 	public float getDistance(){
 		return distance;
 	}
@@ -247,26 +244,54 @@ public class PlayAreaView extends View {
 
 	public void calculateDistance(){
 		final float g = (float) 9.81;
-		this.distance = (float) (((velocity*velocity)/g)*Math.sin(angle));
+		this.distance = (float) (-((velocity*velocity)/g)*Math.sin(angle)*1000);
+	}
+
+	public double degToRad(double angle){
+		return (Math.PI*angle)/180;
 	}
 
 	//Calcul les nouvelles coord et Insere un nain
-	public void calculateCoord(double lat, double lon, long id){
+	public void calculateCoord(long id){
 		final float R = 6371;
+		double lat=0;
+		double lon=0;				
 		double latitude;
 		double longitude;
-		latitude=Math.asin(Math.sin(lat)*Math.cos((double) distance/R)+Math.cos(lat)*Math.sin((double)distance/R)*Math.cos(angle));
-		longitude=lon+Math.atan2(Math.sin(angle)*Math.sin((double) distance/R)*Math.cos(lat), Math.cos((double) distance/R)-Math.sin(lat)*Math.sin(latitude));
-		Dwarf newDwarf = new Dwarf(latitude, longitude);
-		
+
 		dataSource.open();
 		if(id == -1){
+			//Récupère la position actuelle du joueur et les utilise pour les coordonnées actuelles du nouveau nain
+			LocationManager lm = (LocationManager) this.getContext().getSystemService(Context.LOCATION_SERVICE);
+			Location location = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+			lat=location.getLatitude();
+			lon=location.getLongitude();
+			//Recalcule les nouvelles coordonnées après que le nain ait été lancé
+			Log.v("Nord", Float.toString(northOrientation));
+			latitude=Math.asin(Math.sin(lat)*Math.cos((double) distance/R)+Math.cos(lat)*Math.sin((double)distance/R)*Math.cos(degToRad(northOrientation)));
+			longitude=lon+Math.atan2(Math.sin(degToRad(northOrientation))*Math.sin((double) distance/R)*Math.cos(lat), Math.cos((double) distance/R)-Math.sin(lat)*Math.sin(latitude));
+			Dwarf newDwarf = new Dwarf(latitude, longitude);
 			dataSource.createDwarf(newDwarf);
 			Log.v("Debug", "CreateDwarf");
-		} else {
-			newDwarf.setId(id);
+			Log.v("longDepart", Double.toString(lon));
+			Log.v("LatDepart", Double.toString(lat));
+			Log.v("LongArrivee", Double.toString(longitude));
+			Log.v("LatArrivee", Double.toString(latitude));
+		}
+		else {
+			Dwarf newDwarf = dataSource.getDwarf(id);
+			lat = newDwarf.getLatitude();
+			lon = newDwarf.getLongitude();
+			latitude=Math.asin(Math.sin(lat)*Math.cos((double) distance/R)+Math.cos(lat)*Math.sin((double)distance/R)*Math.cos(degToRad(northOrientation)));
+			longitude=lon+Math.atan2(Math.sin(degToRad(northOrientation))*Math.sin((double) distance/R)*Math.cos(lat), Math.cos((double) distance/R)-Math.sin(lat)*Math.sin(latitude));
+			newDwarf.setLatitude(latitude);
+			newDwarf.setLongitude(longitude);
 			dataSource.updateDwarf(newDwarf);
 			Log.v("Debug", "UpdateDwarf");
+			Log.v("longDepart", Double.toString(lon));
+			Log.v("LatDepart", Double.toString(lat));
+			Log.v("LongArrivee", Double.toString(longitude));
+			Log.v("LatArrivee", Double.toString(latitude));
 		}
 		dataSource.close();
 	}
