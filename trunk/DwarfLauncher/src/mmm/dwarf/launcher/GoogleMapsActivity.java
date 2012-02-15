@@ -17,6 +17,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.widget.Button;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -151,10 +152,18 @@ public class GoogleMapsActivity extends MapActivity {
 			AlertDialog alert = builder.create();
 			alert.show();
 	}
-
+	
 	@Override
 	protected boolean isRouteDisplayed() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	public void onBackPressed() {
+	   Intent setIntent = new Intent(getApplicationContext(), DwarfLauncherActivity.class);
+	   setIntent.addCategory(Intent.CATEGORY_HOME);
+	   setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	   startActivity(setIntent);
 	}
 }

@@ -62,20 +62,19 @@ public class HelloItemizedOverlay extends com.google.android.maps.ItemizedOverla
 		loc.setLatitude(latitude);
 		loc.setLongitude(longitude);
 		
-		//if(location.distanceTo(loc)<50){
-
+		if(location.distanceTo(loc)<200){
 			SharedPreferences settings = mContext.getSharedPreferences("lance", 4);
 			SharedPreferences.Editor editor = settings.edit();
 			editor.putLong("idTouch", dwarf.getId());
 			editor.commit();
 			Intent intent=new Intent(mContext, LaunchPlateformActivity.class);
 			mContext.startActivity(intent);
-		//}else{
+		}else{
 			MediaPlayer mp=MediaPlayer.create(mContext, R.raw.philippe);
 			mp.start();
 			Toast toast = Toast.makeText(mContext, "Nain trop loin! Rapproche toi feignant!", Toast.LENGTH_LONG);
 			toast.show();
-		//}
+		}
 		return true;
 	}
 }

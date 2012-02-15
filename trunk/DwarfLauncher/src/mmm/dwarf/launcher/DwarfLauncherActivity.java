@@ -20,10 +20,12 @@ public class DwarfLauncherActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.menu);	
-		MediaPlayer mp=MediaPlayer.create(getBaseContext(), R.raw.intro);
+		mp=MediaPlayer.create(getBaseContext(), R.raw.intro);
 		mp.start();
 	}
 
+	private MediaPlayer mp;
+	
 	public void jouer(View MenuView) {
 		//Lancer le nain
 		SharedPreferences settings = this.getSharedPreferences("lance", 4);
@@ -64,6 +66,15 @@ public class DwarfLauncherActivity extends Activity{
 		Intent gmaps = new Intent(DwarfLauncherActivity.this, GoogleMapsActivity.class);
 		startActivity(gmaps);
 
+	}
+	
+	public void stopSound(View menuView){
+		if(this.mp.isPlaying()){
+			this.mp.stop();
+		}
+		else{
+			this.mp.start();
+		}
 	}
 	
 	
