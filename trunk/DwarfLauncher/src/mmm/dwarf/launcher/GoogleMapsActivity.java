@@ -7,20 +7,22 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.location.LocationProvider;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
-import android.util.Log;
+
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapView;
+import com.google.android.maps.MyLocationOverlay;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 
 public class GoogleMapsActivity extends MapActivity {
 
@@ -59,6 +61,30 @@ public class GoogleMapsActivity extends MapActivity {
 			afficherPoint(dwarf.getLatitude(), dwarf.getLongitude(),dwarf.getId());
 		}
 		
+		// Acquire a reference to the system Location Manager
+		LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+		// Define a listener that responds to location updates
+		LocationListener locationListener = new LocationListener() {
+		    public void onLocationChanged(Location location) {
+		      // Called when a new location is found by the network location provider.
+		      //afficherMaLocalisation(location);
+		    }
+
+			public void onStatusChanged(String provider, int status, Bundle extras) {}
+
+		    public void onProviderEnabled(String provider) {}
+
+		    public void onProviderDisabled(String provider) {}
+		  };
+
+		// Register the listener with the Location Manager to receive location updates
+		locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, locationListener);
+		locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+		MyLocationOverlay mlo = new MyLocationOverlay(this, mapView) ; 
+		mlo.enableCompass(); 
+		mlo.enableMyLocation(); 
+		mapView.getOverlays().add(mlo); 
 		
 		
 //		// Register the listener with the Location Manager to receive location updates
@@ -90,7 +116,10 @@ public class GoogleMapsActivity extends MapActivity {
 		}
 	}
 
-
+	private void afficherMaLocalisation(Location location) {
+		GeoPoint me = new GeoPoint((int) (location.getLatitude()* 1E6), (int) (location.getLongitude()* 1E6));		
+		
+	}
 
 	protected void afficherPoint(double latitude, double longitude,long id) {
 		latitude = latitude* 1E6;
