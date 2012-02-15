@@ -22,6 +22,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Interpolator;
 import android.view.animation.OvershootInterpolator;
+import android.widget.Toast;
 
 public class PlayAreaView extends View {
 	private Matrix translate;  
@@ -307,6 +308,8 @@ public class PlayAreaView extends View {
 			Log.v("LongArrivee", Double.toString(longitude));
 			Log.v("LatArrivee", Double.toString(latitude));
 		}
+		Toast t=Toast.makeText(getContext(), "Nain expédié à "+distance, Toast.LENGTH_SHORT);
+		t.show();
 		dataSource.close();
 	}
 }
