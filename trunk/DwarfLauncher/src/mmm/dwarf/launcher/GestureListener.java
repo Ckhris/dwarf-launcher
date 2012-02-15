@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
+import android.widget.Toast;
 
 public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 
@@ -44,6 +45,7 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, final float velocityY) {  
 		//Log.v("TG", "onFling");
 		velocityX=0;
+
 		if(velocityY<0){
 			view.velocityY=velocityY;
 			final float distanceTimeFactor = 0.4f;  
@@ -51,11 +53,11 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 			final float totalDy = (distanceTimeFactor * velocityY/2);
 			view.setVelocity(velocityY);
 			view.calculateDistance();
-
 			view.onAnimateMove(totalDx, totalDy,  
 					(long) (1000 * distanceTimeFactor));
-
-		}else{
+		}
+		else{
+			Toast t = Toast.makeText(view.getContext(), "Hey ! Tu ne peux lancer le nain dans ce sens. Tourne toi !", 5);
 			MediaPlayer mediaPlayer = MediaPlayer.create(view.getContext(), R.raw.too);
 			mediaPlayer.start();
 		}
