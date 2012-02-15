@@ -8,12 +8,16 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageButton;
 
 public class DwarfLauncherActivity extends Activity{
 	
@@ -85,9 +89,13 @@ public class DwarfLauncherActivity extends Activity{
 	public void stopSound(View menuView){
 		if(this.mp.isPlaying()){
 			this.mp.pause();
+			ImageButton button = (ImageButton) findViewById(R.id.stopSound);
+			button.setImageResource(R.drawable.mug2);
 		}
 		else{
 			this.mp.start();
+			ImageButton button = (ImageButton) findViewById(R.id.stopSound);
+			button.setImageResource(R.drawable.mug1);
 		}
 	}
 	
