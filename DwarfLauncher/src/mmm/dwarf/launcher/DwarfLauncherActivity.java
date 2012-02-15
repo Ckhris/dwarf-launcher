@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,7 +20,8 @@ public class DwarfLauncherActivity extends Activity{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.menu);	
-		
+		MediaPlayer mp=MediaPlayer.create(getBaseContext(), R.raw.intro);
+		mp.start();
 	}
 
 	public void jouer(View MenuView) {
