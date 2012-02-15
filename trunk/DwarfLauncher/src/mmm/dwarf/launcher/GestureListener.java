@@ -44,8 +44,8 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, final float velocityY) {  
 		//Log.v("TG", "onFling");
 		velocityX=0;
-		view.velocityY=velocityY;
-		if(velocityY>0){
+		if(velocityY<0){
+			view.velocityY=velocityY;
 			final float distanceTimeFactor = 0.4f;  
 			final float totalDx = (distanceTimeFactor * velocityX/2);  
 			final float totalDy = (distanceTimeFactor * velocityY/2);
