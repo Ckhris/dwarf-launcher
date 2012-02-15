@@ -244,21 +244,25 @@ public class PlayAreaView extends View {
 
 	public void calculateDistance(){
 		final float g = (float) 9.81;
-		this.distance = (float) (-((velocity*velocity)/g)*Math.sin(angle)*1000);
+		this.distance = (float) (((velocity*velocity)/g)*Math.sin(degToRad(angle))/1000000);
 	}
 
 	public double degToRad(double angle){
 		return (Math.PI*angle)/180;
 	}
+	
+	public double radToDeg(double angle){
+		return (angle*180/Math.PI);
+	}
 
 	//Calcul les nouvelles coord et Insere un nain
 	public void calculateCoord(long id){
 		final float R = 6371;
-		double lat=0;
-		double lon=0;				
+		double lat;
+		double lon;				
 		double latitude;
 		double longitude;
-
+		Log.v("Distance", Double.toString(distance));
 		dataSource.open();
 		if(id == -1){
 			//Récupère la position actuelle du joueur et les utilise pour les coordonnées actuelles du nouveau nain
@@ -268,11 +272,16 @@ public class PlayAreaView extends View {
 			lon=location.getLongitude();
 			//Recalcule les nouvelles coordonnées après que le nain ait été lancé
 			Log.v("Nord", Float.toString(northOrientation));
-			latitude=Math.asin(Math.sin(lat)*Math.cos((double) distance/R)+Math.cos(lat)*Math.sin((double)distance/R)*Math.cos(degToRad(northOrientation)));
-			longitude=lon+Math.atan2(Math.sin(degToRad(northOrientation))*Math.sin((double) distance/R)*Math.cos(lat), Math.cos((double) distance/R)-Math.sin(lat)*Math.sin(latitude));
+			latitude=Math.asin(Math.sin(degToRad(lat))*Math.cos(degToRad((double) distance/R))+Math.cos(degToRad(lat))*Math.sin(degToRad((double)distance/R))*Math.cos(degToRad(-northOrientation)));
+			longitude = degToRad(lon) + Math.atan2(Math.sin(degToRad(-northOrientation))*Math.sin(distance/R)*Math.cos(degToRad(lat)), 
+                    Math.cos(distance/R)-Math.sin(degToRad(lat))*Math.sin(degToRad(latitude)));
+			longitude = (longitude+3*Math.PI) % (2*Math.PI) - Math.PI;
+			latitude=radToDeg(latitude);
+			longitude=radToDeg(longitude);
 			Dwarf newDwarf = new Dwarf(latitude, longitude);
 			dataSource.createDwarf(newDwarf);
 			Log.v("Debug", "CreateDwarf");
+			Log.v("orientation", Float.toString(northOrientation));
 			Log.v("longDepart", Double.toString(lon));
 			Log.v("LatDepart", Double.toString(lat));
 			Log.v("LongArrivee", Double.toString(longitude));
@@ -282,12 +291,17 @@ public class PlayAreaView extends View {
 			Dwarf newDwarf = dataSource.getDwarf(id);
 			lat = newDwarf.getLatitude();
 			lon = newDwarf.getLongitude();
-			latitude=Math.asin(Math.sin(lat)*Math.cos((double) distance/R)+Math.cos(lat)*Math.sin((double)distance/R)*Math.cos(degToRad(northOrientation)));
-			longitude=lon+Math.atan2(Math.sin(degToRad(northOrientation))*Math.sin((double) distance/R)*Math.cos(lat), Math.cos((double) distance/R)-Math.sin(lat)*Math.sin(latitude));
+			latitude=Math.asin(Math.sin(degToRad(lat))*Math.cos(degToRad((double) distance/R))+Math.cos(degToRad(lat))*Math.sin(degToRad((double)distance/R))*Math.cos(degToRad(-northOrientation)));
+			longitude = degToRad(lon) + Math.atan2(Math.sin(degToRad(-northOrientation))*Math.sin(distance/R)*Math.cos(degToRad(lat)), 
+                    Math.cos(distance/R)-Math.sin(degToRad(lat))*Math.sin(degToRad(latitude)));
+			longitude = (longitude+3*Math.PI) % (2*Math.PI) - Math.PI;
+			latitude=radToDeg(latitude);
+			longitude=radToDeg(longitude);
 			newDwarf.setLatitude(latitude);
 			newDwarf.setLongitude(longitude);
 			dataSource.updateDwarf(newDwarf);
 			Log.v("Debug", "UpdateDwarf");
+			Log.v("orientation", Float.toString(northOrientation));
 			Log.v("longDepart", Double.toString(lon));
 			Log.v("LatDepart", Double.toString(lat));
 			Log.v("LongArrivee", Double.toString(longitude));
