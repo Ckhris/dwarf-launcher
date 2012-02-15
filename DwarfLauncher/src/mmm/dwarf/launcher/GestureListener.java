@@ -46,15 +46,15 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 		velocityX=0;
 		view.velocityY=velocityY;
 		if(velocityY>0){
-		final float distanceTimeFactor = 0.4f;  
-		final float totalDx = (distanceTimeFactor * velocityX/2);  
-		final float totalDy = (distanceTimeFactor * velocityY/2);
-		view.setVelocity(velocityY);
-		view.calculateDistance();
+			final float distanceTimeFactor = 0.4f;  
+			final float totalDx = (distanceTimeFactor * velocityX/2);  
+			final float totalDy = (distanceTimeFactor * velocityY/2);
+			view.setVelocity(velocityY);
+			view.calculateDistance();
 
-		view.onAnimateMove(totalDx, totalDy,  
-				(long) (1000 * distanceTimeFactor));
-			
+			view.onAnimateMove(totalDx, totalDy,  
+					(long) (1000 * distanceTimeFactor));
+
 		}else{
 			MediaPlayer mediaPlayer = MediaPlayer.create(view.getContext(), R.raw.too);
 			mediaPlayer.start();
