@@ -1,6 +1,7 @@
 package mmm.dwarf.launcher;
 
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.GestureDetector.OnDoubleTapListener;
@@ -41,9 +42,10 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 	}
 	@Override  
 	public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX, final float velocityY) {  
-		//Log.v("TG", "onFling");  
+		//Log.v("TG", "onFling");
 		velocityX=0;
 		view.velocityY=velocityY;
+		if(velocityY>0){
 		final float distanceTimeFactor = 0.4f;  
 		final float totalDx = (distanceTimeFactor * velocityX/2);  
 		final float totalDy = (distanceTimeFactor * velocityY/2);
@@ -52,6 +54,11 @@ public class GestureListener implements OnGestureListener, OnDoubleTapListener {
 
 		view.onAnimateMove(totalDx, totalDy,  
 				(long) (1000 * distanceTimeFactor));
+			
+		}else{
+			MediaPlayer mediaPlayer = MediaPlayer.create(view.getContext(), R.raw.too);
+			mediaPlayer.start();
+		}
 		return true;
 	}
 
