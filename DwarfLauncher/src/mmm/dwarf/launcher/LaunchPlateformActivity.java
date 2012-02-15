@@ -4,6 +4,7 @@ import java.util.List;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -76,6 +77,14 @@ public class LaunchPlateformActivity extends Activity {
 
 		}
 	};
+	
+	@Override
+	public void onBackPressed() {
+	   Intent setIntent = new Intent(getApplicationContext(), DwarfLauncherActivity.class);
+	   setIntent.addCategory(Intent.CATEGORY_HOME);
+	   setIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	   startActivity(setIntent);
+	}
 	
 	protected void onResume(){
 		super.onResume();
