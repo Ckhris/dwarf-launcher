@@ -12,7 +12,7 @@
         android:layout_weight="0.55"
         android:text="  Bienvenue sur l'application DWARF LAUNCHER.
         \n\n  Cette application communautaire consiste à lancer un nain sur une Google Map.\n\n  Deux utilisations sont possibles : 
-        \n\n\t- La première consiste à créer votre propre nain afin de le lancer sur la carte.\n\t-  La seconde consiste à récuperer un nain d'un autre joueur suivant votre position et de le lancer sur la carte.\n\n  Ce projet à été créé par les étudiants de
+        \n\n\t- La première consiste à créer votre propre nain afin de le lancer sur la carte.\n\t-  La seconde consiste à récuperer un nain d'un autre joueur suivant votre position et de le lancer sur la carte.\n\n  Ce projet a été créé par les étudiants de
            Master 2 MIAGE." />
 
 </LinearLayout>
