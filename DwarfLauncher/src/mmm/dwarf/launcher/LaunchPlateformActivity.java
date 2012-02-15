@@ -9,6 +9,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.FrameLayout;
 
 public class LaunchPlateformActivity extends Activity {
@@ -66,7 +67,7 @@ public class LaunchPlateformActivity extends Activity {
 		public void onSensorChanged(SensorEvent event) {
 			// TODO Auto-generated method stub
 			angle=event.values[1];
-			image.setAngle(angle);
+			image.setAngle(-angle);
 		}
 
 		@Override

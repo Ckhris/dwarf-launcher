@@ -16,6 +16,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
@@ -245,7 +246,21 @@ public class PlayAreaView extends View {
 
 	public void calculateDistance(){
 		final float g = (float) 9.81;
-		this.distance = (float) (((velocity*velocity)/g)*Math.sin(degToRad(angle))/1000000);
+		Log.v("TestAngle", Float.toString(distance));
+		if(angle<0){
+			this.distance=0;
+			Toast t = Toast.makeText(getContext(), "Malheureusement le nain s'écrase à tes pieds...", 5);
+			MediaPlayer mp = MediaPlayer.create(getContext(), R.raw.wilhelmscream);
+			mp.start();
+			t.show();
+		}
+		else{
+			this.distance = (float) (((velocity*velocity)/g)*Math.sin(degToRad(angle))/1000000);
+			MediaPlayer mp= MediaPlayer.create(getContext(), R.raw.wouhou);
+			mp.start();
+			Toast t = Toast.makeText(getContext(), "Le nain atterrie à "+distance+" km de là !", 5);
+			t.show();
+		}		
 	}
 
 	public double degToRad(double angle){
@@ -273,8 +288,8 @@ public class PlayAreaView extends View {
 			lon=location.getLongitude();
 			//Recalcule les nouvelles coordonnées après que le nain ait été lancé
 			Log.v("Nord", Float.toString(northOrientation));
-			latitude=Math.asin(Math.sin(degToRad(lat))*Math.cos(degToRad((double) distance/R))+Math.cos(degToRad(lat))*Math.sin(degToRad((double)distance/R))*Math.cos(degToRad(-northOrientation)));
-			longitude = degToRad(lon) + Math.atan2(Math.sin(degToRad(-northOrientation))*Math.sin(distance/R)*Math.cos(degToRad(lat)), 
+			latitude=Math.asin(Math.sin(degToRad(lat))*Math.cos((double) distance/R)+Math.cos(degToRad(lat))*Math.sin((double)distance/R)*Math.cos(degToRad(northOrientation)));
+			longitude = degToRad(lon) + Math.atan2(Math.sin(degToRad(northOrientation))*Math.sin(distance/R)*Math.cos(degToRad(lat)), 
                     Math.cos(distance/R)-Math.sin(degToRad(lat))*Math.sin(degToRad(latitude)));
 			longitude = (longitude+3*Math.PI) % (2*Math.PI) - Math.PI;
 			latitude=radToDeg(latitude);
@@ -292,8 +307,8 @@ public class PlayAreaView extends View {
 			Dwarf newDwarf = dataSource.getDwarf(id);
 			lat = newDwarf.getLatitude();
 			lon = newDwarf.getLongitude();
-			latitude=Math.asin(Math.sin(degToRad(lat))*Math.cos(degToRad((double) distance/R))+Math.cos(degToRad(lat))*Math.sin(degToRad((double)distance/R))*Math.cos(degToRad(-northOrientation)));
-			longitude = degToRad(lon) + Math.atan2(Math.sin(degToRad(-northOrientation))*Math.sin(distance/R)*Math.cos(degToRad(lat)), 
+			latitude=Math.asin(Math.sin(degToRad(lat))*Math.cos((double) distance/R)+Math.cos(degToRad(lat))*Math.sin((double)distance/R)*Math.cos(degToRad(northOrientation)));
+			longitude = degToRad(lon) + Math.atan2(Math.sin(degToRad(northOrientation))*Math.sin(distance/R)*Math.cos(degToRad(lat)), 
                     Math.cos(distance/R)-Math.sin(degToRad(lat))*Math.sin(degToRad(latitude)));
 			longitude = (longitude+3*Math.PI) % (2*Math.PI) - Math.PI;
 			latitude=radToDeg(latitude);
