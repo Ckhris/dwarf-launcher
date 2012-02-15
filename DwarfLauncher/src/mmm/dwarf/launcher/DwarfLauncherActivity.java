@@ -70,7 +70,7 @@ public class DwarfLauncherActivity extends Activity{
 	
 	public void stopSound(View menuView){
 		if(this.mp.isPlaying()){
-			this.mp.stop();
+			this.mp.pause();
 		}
 		else{
 			this.mp.start();
