@@ -1,5 +1,6 @@
 package mmm.dwarf.launcher;
 
+import java.io.IOException;
 import java.util.List;
 
 import android.app.Activity;
@@ -8,6 +9,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.MediaPlayer;
+import android.media.MediaPlayer.OnPreparedListener;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,6 +23,16 @@ public class DwarfLauncherActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.menu);	
 		mp=MediaPlayer.create(getBaseContext(), R.raw.intro);
+		mp.setLooping(true);
+		try {
+			mp.prepare();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		mp.start();
 	}
 
@@ -33,6 +45,7 @@ public class DwarfLauncherActivity extends Activity{
 		editor.putLong("idTouch", -1);
 		editor.commit();
 		Intent intent=new Intent(DwarfLauncherActivity.this, LaunchPlateformActivity.class);
+		mp.stop();
 		startActivity(intent);
 
 	}
@@ -64,6 +77,7 @@ public class DwarfLauncherActivity extends Activity{
 	public void afficherMap(View MenuView) {
 		//Lancement de la google maps
 		Intent gmaps = new Intent(DwarfLauncherActivity.this, GoogleMapsActivity.class);
+		mp.stop();
 		startActivity(gmaps);
 
 	}
@@ -77,6 +91,29 @@ public class DwarfLauncherActivity extends Activity{
 		}
 	}
 	
+	public void onPause(){
+		super.onPause();
+		this.mp.pause();
+	}
 	
+	public void onResume(){
+		super.onResume();
+		try {
+			this.mp.prepare();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		this.mp.start();
+	}
+	
+	@Override
+	public void onBackPressed() {
+	   moveTaskToBack(true);
+	   return;
+	}
 
 }
