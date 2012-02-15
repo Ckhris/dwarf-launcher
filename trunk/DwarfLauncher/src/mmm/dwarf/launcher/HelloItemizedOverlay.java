@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -70,6 +71,8 @@ public class HelloItemizedOverlay extends com.google.android.maps.ItemizedOverla
 			Intent intent=new Intent(mContext, LaunchPlateformActivity.class);
 			mContext.startActivity(intent);
 		//}else{
+			MediaPlayer mp=MediaPlayer.create(mContext, R.raw.philippe);
+			mp.start();
 			Toast toast = Toast.makeText(mContext, "Nain trop loin! Rapproche toi feignant!", Toast.LENGTH_LONG);
 			toast.show();
 		//}
