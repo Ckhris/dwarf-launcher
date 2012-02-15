@@ -309,7 +309,7 @@ public class PlayAreaView extends View {
 			Log.v("LatArrivee", Double.toString(latitude));
 		}
 		double f=Math.round(-distance*100.0)/100.0;
-		Toast t=Toast.makeText(getContext(), "Nain expédié à "+f+" km", Toast.LENGTH_SHORT);
+		Toast t=Toast.makeText(getContext(), "Nain expedie a "+f+" km", Toast.LENGTH_SHORT);
 		t.show();
 		dataSource.close();
 	}
