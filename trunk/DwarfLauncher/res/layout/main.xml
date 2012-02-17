@@ -4,14 +4,15 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <!-- Possible que la apiKey doit etre unique en fonction des users -->
+    <!-- Clé publique -->
     <com.google.android.maps.MapView
 	    xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/mapview"
 	    android:layout_width="fill_parent"
 	    android:layout_height="fill_parent"
 	    android:clickable="true"
-	    android:apiKey="0rdyMHI8dDyXROgs_yoZ60lQfSQcOIroX87s8aA" 
+	    android:apiKey="0rdyMHI8dDyVr5HdgPeIdhM4yEPISaVrtbIUepg" 
+	    
 	/>
 
 </LinearLayout>
